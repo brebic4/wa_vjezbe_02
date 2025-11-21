@@ -18,14 +18,13 @@ router.post("/naruci", (req, res) => {
     const narudzba = zahtjev["narudzba"];
     for (const stavka of narudzba) {
       const kljucevi = Object.keys(stavka);
+      const dozvoljeniKljucevi = ["pizza", "velicina", "kolicina"];
 
-      if (
-        !(
-          kljucevi.includes("pizza") &&
-          kljucevi.includes("velicina") &&
-          kljucevi.includes("kolicina")
-        )
-      ) {
+      const postojeKljucevi = kljucevi.every((kljuc) =>
+        dozvoljeniKljucevi.includes(kljuc)
+      );
+
+      if (!postojeKljucevi || kljucevi.length != 3) {
         return res
           .status(400)
           .send("Nisu poslani svi potrebni podaci o narudzbi!");
@@ -39,13 +38,14 @@ router.post("/naruci", (req, res) => {
   } else {
     const klijent = zahtjev["klijent"];
     const kljucevi = Object.keys(klijent);
-    if (
-      !(
-        kljucevi.includes("prezime") &&
-        kljucevi.includes("adresa") &&
-        kljucevi.includes("broj_telefona")
-      )
-    ) {
+    const dozvoljeniKljucevi = ["prezime", "adresa", "broj_telefona"];
+
+    //provjera kljuceva
+    const postojeKljucevi = kljucevi.every((kljuc) =>
+      dozvoljeniKljucevi.includes(kljuc)
+    );
+
+    if (!postojeKljucevi || kljucevi.length != 3) {
       return res
         .status(400)
         .send("Nisu poslani svi potrebni podaci o klijentu!");
