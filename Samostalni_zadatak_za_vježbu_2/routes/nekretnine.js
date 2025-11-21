@@ -14,6 +14,15 @@ export let nekretnine = [
   },
 ];
 
+const dozvoljeniKljucevi = [
+  "naziv",
+  "opis",
+  "cijena",
+  "lokacija",
+  "brojSoba",
+  "povrsina",
+];
+
 //dohvati sve nekretnine
 router.get("/", (req, res) => {
   return res.status(200).json(nekretnine);
@@ -45,16 +54,11 @@ router.post("/", (req, res) => {
   let nekretnina = req.body;
   const kljucevi = Object.keys(nekretnina);
 
-  if (
-    !(
-      kljucevi.includes("naziv") &&
-      kljucevi.includes("opis") &&
-      kljucevi.includes("cijena") &&
-      kljucevi.includes("lokacija") &&
-      kljucevi.includes("brojSoba") &&
-      kljucevi.includes("povrsina")
-    )
-  ) {
+  const postojeKljucevi = kljucevi.every((kljuc) =>
+    dozvoljeniKljucevi.includes(kljuc)
+  );
+
+  if (!postojeKljucevi || kljucevi.length != 6) {
     return res.status(400).json({ message: "Nedostaju podaci nekretnine!" });
   }
 
@@ -100,16 +104,11 @@ router.put("/:id", (req, res) => {
       .json({ message: "Nekretnina sa traženim ID-em nije pronađena!" });
   }
 
-  if (
-    !(
-      kljucevi.includes("naziv") &&
-      kljucevi.includes("opis") &&
-      kljucevi.includes("cijena") &&
-      kljucevi.includes("lokacija") &&
-      kljucevi.includes("brojSoba") &&
-      kljucevi.includes("povrsina")
-    )
-  ) {
+  const postojeKljucevi = kljucevi.every((kljuc) =>
+    dozvoljeniKljucevi.includes(kljuc)
+  );
+
+  if (!postojeKljucevi || kljucevi.length != 6) {
     return res.status(400).json({ message: "Nedostaju podaci nekretnine!" });
   }
 

@@ -13,16 +13,19 @@ router.get("/", (req, res) => {
 router.post("/", (req, res) => {
   const ponuda = req.body;
   const kljucevi = Object.keys(ponuda);
+  const dozvoljeniKljucevi = [
+    "id_nekretnine",
+    "ime",
+    "prezime",
+    "cijena",
+    "broj_telefona",
+  ];
 
-  if (
-    !(
-      kljucevi.includes("id_nekretnine") &&
-      kljucevi.includes("ime") &&
-      kljucevi.includes("prezime") &&
-      kljucevi.includes("cijena") &&
-      kljucevi.includes("broj_telefona")
-    )
-  ) {
+  const postojeKljucevi = kljucevi.every((kljuc) =>
+    dozvoljeniKljucevi.includes(kljuc)
+  );
+
+  if (!postojeKljucevi || kljucevi.length != 5) {
     return res
       .status(400)
       .json({ message: "Ponuda ne sadrži sve informacije!" });
